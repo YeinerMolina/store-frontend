@@ -6,9 +6,14 @@ import { API_BASE_URL, errorInterceptor } from '@retail/shared/data-access';
 
 import { appRoutes } from './app.routes';
 import { environment } from '../environments/environment';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideClientHydration(withEventReplay()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptors([errorInterceptor])),
