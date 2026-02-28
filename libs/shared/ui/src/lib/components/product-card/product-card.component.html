@@ -1,0 +1,12 @@
+<article class="product-card" (click)="onCardClick()" (keydown.enter)="onCardClick()" tabindex="0">
+  @if (producto().imagenPrincipal) {
+    <img [src]="producto().imagenPrincipal" [alt]="producto().nombre" class="product-card__image" />
+  } @else {
+    <div class="product-card__image product-card__image--placeholder"></div>
+  }
+  <div class="product-card__content">
+    <h3 class="product-card__name">{{ producto().nombre }}</h3>
+    <retail-price-display [precio]="producto().precio" />
+    <retail-availability-badge [disponibilidad]="producto().disponibilidad" />
+  </div>
+</article>

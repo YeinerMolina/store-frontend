@@ -1,0 +1,13 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
+import { formatRelativeTime } from '@retail/shared/util';
+
+@Pipe({
+  name: 'relativeTime',
+  standalone: true,
+})
+export class RelativeTimePipe implements PipeTransform {
+  transform(value: string): string {
+    return formatRelativeTime(value);
+  }
+}

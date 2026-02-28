@@ -1,0 +1,24 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+
+  &__message {
+    color: #757575;
+    font-size: 1.125rem;
+    margin-bottom: 16px;
+  }
+
+  &__action {
+    padding: 8px 24px;
+    border: 1px solid #1a237e;
+    border-radius: 4px;
+    background: transparent;
+    color: #1a237e;
+    cursor: pointer;
+    font-weight: 500;
+  }
+}

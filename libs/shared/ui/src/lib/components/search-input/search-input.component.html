@@ -1,0 +1,9 @@
+<div class="search-input">
+  <input
+    type="text"
+    [placeholder]="placeholder()"
+    [value]="searchTerm()"
+    (input)="onInput($any($event.target).value)"
+    class="search-input__field"
+  />
+</div>
