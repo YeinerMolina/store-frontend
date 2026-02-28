@@ -107,10 +107,62 @@ Routes = [
 - **Feature docs** — `src/app/features/CLAUDE_HOME.md`, `CLAUDE_CATALOGO.md`, `CLAUDE_INFO.md` for feature-specific details
 - **Shared libraries** — `../../libs/shared/*/CLAUDE.md` for shared library implementation details
 
+## Angular Conventions (mandatory)
+
+### Component API — Signal-based inputs/outputs
+Always use the new signal-based API. Never use `@Input()` / `@Output()` decorators in new components.
+
+```typescript
+// ✅ DO — signal-based
+import { input, output, model } from '@angular/core';
+
+export class ProductCardComponent {
+  product = input.required<Product>();
+  quantity = model(1);           // two-way bindable signal
+  addToCart = output<Product>();
+}
+
+// ❌ DON'T — decorator-based (legacy)
+@Input() product!: Product;
+@Output() addToCart = new EventEmitter<Product>();
+```
+
+### Change Detection — always OnPush
+Every component MUST declare `changeDetection: ChangeDetectionStrategy.OnPush`.
+ESLint rule `@angular-eslint/prefer-on-push-component-change-detection` enforces this.
+
+### SEO — use SeoService
+Every page component (route entry point) must call `SeoService.update()` on init.
+
+```typescript
+import { SeoService } from '../../core/seo/seo.service';
+
+export class CatalogoPageComponent {
+  private seo = inject(SeoService);
+
+  ngOnInit() {
+    this.seo.update({
+      title: 'Catálogo',
+      description: 'Explorá todos nuestros productos.',
+    });
+  }
+}
+```
+
+### Images — NgOptimizedImage
+Use `NgOptimizedImage` (`[ngSrc]`) for all product images. Always provide `width` and `height`.
+
+```typescript
+import { NgOptimizedImage } from '@angular/common';
+
+// In template:
+// <img [ngSrc]="product.imageUrl" width="400" height="400" alt="..." />
+```
+
 ## MVP Alerts
 
 1. **No client auth** — but `/core/guards/` exists and is ready for post-MVP authentication (client accounts, order history, etc.)
-2. **SEO limitation** — Angular SPA without SSR is not SEO-friendly. Accepted for MVP. Evaluate Angular SSR (hydration) post-MVP.
+2. **SSR active** — App uses Angular SSR with `provideClientHydration(withEventReplay())`. `/info` prerenders (SSG), catalog routes use SSR.
 3. **Responsive** — Mobile-first is **mandatory**. Target audience accesses primarily from mobile devices.
-4. **Image lazy loading** — Use `LazyImageDirective` from `@retail/shared/ui` for all product images.
+4. **Image lazy loading** — Use `NgOptimizedImage` (`[ngSrc]`) for all product images, NOT `LazyImageDirective`.
 5. **No cart/checkout** — MVP is catalog-only (browse, filter, view details). Cart and checkout are post-MVP features.

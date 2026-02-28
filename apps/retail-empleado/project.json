@@ -17,9 +17,7 @@
       "options": {
         "outputPath": "dist/apps/retail-empleado",
         "browser": "apps/retail-empleado/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": [],
         "tsConfig": "apps/retail-empleado/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

@@ -103,6 +103,40 @@ src/app/
 | Paquete | Set / Kit |
 | Parámetro Operativo | Configuración |
 
+## Angular Conventions (mandatory)
+
+### Component API — Signal-based inputs/outputs
+Always use the new signal-based API. Never use `@Input()` / `@Output()` decorators in new components.
+
+```typescript
+// ✅ DO — signal-based
+import { input, output, model } from '@angular/core';
+
+export class ProductTableComponent {
+  productos = input.required<Producto[]>();
+  selected = output<Producto>();
+}
+
+// ❌ DON'T — decorator-based (legacy)
+@Input() productos!: Producto[];
+@Output() selected = new EventEmitter<Producto>();
+```
+
+### Change Detection — always OnPush
+Every component MUST declare `changeDetection: ChangeDetectionStrategy.OnPush`.
+ESLint rule `@angular-eslint/prefer-on-push-component-change-detection` enforces this.
+
+### State — signals over properties
+Prefer `signal()` + `computed()` over plain class properties for reactive state in components.
+
+```typescript
+// ✅ DO
+export class InventarioPageComponent {
+  private items = signal<Producto[]>([]);
+  lowStock = computed(() => this.items().filter(p => p.stock < 5));
+}
+```
+
 ## Cross-References
 
 - **Root `../../CLAUDE.md`** — workspace conventions, Nx rules
